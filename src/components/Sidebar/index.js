@@ -9,10 +9,10 @@ function Sidebar() {
       <div>
         <Nav main>
           <li>
-            <a href="">Navegar</a>
+            <a href="https://www.speedtest.net/">Navegar</a>
           </li>
           <li>
-            <a href="">Rádio</a>
+            <a href="https://www.speedtest.net/">Rádio</a>
           </li>
         </Nav>
 
@@ -21,28 +21,28 @@ function Sidebar() {
             <span>SUA BIBLIOTECA</span>
           </li>
           <li>
-            <a href="">Seu Daily Mix</a>
+            <a href="https://www.speedtest.net/">Seu Daily Mix</a>
           </li>
           <li>
-            <a href="">Tocados Recentemente</a>
+            <a href="https://www.speedtest.net/">Tocados Recentemente</a>
           </li>
           <li>
-            <a href="">Álbuns</a>
+            <a href="https://www.speedtest.net/">Álbuns</a>
           </li>
           <li>
-            <a href="">Artistas</a>
+            <a href="https://www.speedtest.net/">Artistas</a>
           </li>
           <li>
-            <a href="">Estações</a>
+            <a href="https://www.speedtest.net/">Estações</a>
           </li>
           <li>
-            <a href="">Arquivos locais</a>
+            <a href="https://www.speedtest.net/">Arquivos locais</a>
           </li>
           <li>
-            <a href="">Vídeos</a>
+            <a href="https://www.speedtest.net/">Vídeos</a>
           </li>
           <li>
-            <a href="">Podcast</a>
+            <a href="https://www.speedtest.net/">Podcast</a>
           </li>
         </Nav>
         <Nav>
@@ -50,7 +50,7 @@ function Sidebar() {
             <span>PLAYLISTS</span>
           </li>
           <li>
-            <a href="">Melhores do rock</a>
+            <a href="https://www.speedtest.net/">Melhores do rock</a>
           </li>
         </Nav>
       </div>
