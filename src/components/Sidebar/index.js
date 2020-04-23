@@ -1,11 +1,33 @@
-import React from "react";
+import React, { Component } from "react";
+import propTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Creators as PlaylistsActions } from '../../store/ducks/playlists';
 
 import { Container, NewPlaylist, Nav } from "./styles";
 import AddPlayListIcon from "../../assets/images/add_playlist.svg";
 
-function Sidebar() {
-  return (
-    <Container>
+
+class Sidebar extends Component{
+  static propTypes = {
+    getPlaylistsRequest: propTypes.func.isRequired,
+    playlists: propTypes.shape({
+      data: propTypes.arrayOf(propTypes.shape({
+        id: propTypes.number,
+        title: propTypes.string,
+      })),
+    }).isRequired,
+  };
+
+  componentDidMount(){
+    this.props.getPlaylistsRequest();
+  }
+
+  render(){
+    return(
+      <Container>
       <div>
         <Nav main>
           <li>
@@ -49,9 +71,11 @@ function Sidebar() {
           <li>
             <span>PLAYLISTS</span>
           </li>
-          <li>
-            <a href="https://www.speedtest.net/">Melhores do rock</a>
-          </li>
+          {this.props.playlists.data.map(playlist => (
+            <li key={playlist.id}>
+              <Link to={`Playlists/${playlist.id}`}>{playlist.title} </Link>
+            </li>
+          ))}
         </Nav>
       </div>
       <NewPlaylist>
@@ -59,10 +83,18 @@ function Sidebar() {
         Nova playlist
       </NewPlaylist>
     </Container>
-  );
+    );
+  }
 }
 
-export default Sidebar;
+const mapSateToProps = state =>({
+  playlists: state.playlists,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators(PlaylistsActions, dispatch);
+
+
+export default connect(mapSateToProps, mapDispatchToProps)(Sidebar);
 
 // const Sidebar = () => <Container></Container>;
 

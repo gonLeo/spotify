@@ -20,7 +20,7 @@ export default function playlists(state = INITIAL_STATE, action){
 }
 
 export const Creators = {
-    getPlaylistRequest: () =>({type: Types.GET_REQUEST}),
+    getPlaylistsRequest: () =>({type: Types.GET_REQUEST}),
 
     getPlaylistSuccess: data => ({
         type: Types.GET_SUCESS,
