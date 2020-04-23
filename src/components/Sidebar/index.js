@@ -31,10 +31,10 @@ class Sidebar extends Component{
       <div>
         <Nav main>
           <li>
-            <a href="https://www.speedtest.net/">Navegar</a>
+            <Link to="/">Navegar</Link>
           </li>
           <li>
-            <a href="https://www.speedtest.net/">Rádio</a>
+            <a href="">Rádio</a>
           </li>
         </Nav>
 
@@ -43,28 +43,28 @@ class Sidebar extends Component{
             <span>SUA BIBLIOTECA</span>
           </li>
           <li>
-            <a href="https://www.speedtest.net/">Seu Daily Mix</a>
+            <a href="">Seu Daily Mix</a>
           </li>
           <li>
-            <a href="https://www.speedtest.net/">Tocados Recentemente</a>
+            <a href="">Tocados Recentemente</a>
           </li>
           <li>
-            <a href="https://www.speedtest.net/">Álbuns</a>
+            <a href="">Álbuns</a>
           </li>
           <li>
-            <a href="https://www.speedtest.net/">Artistas</a>
+            <a href="">Artistas</a>
           </li>
           <li>
-            <a href="https://www.speedtest.net/">Estações</a>
+            <a href="">Estações</a>
           </li>
           <li>
-            <a href="https://www.speedtest.net/">Arquivos locais</a>
+            <a href="">Arquivos locais</a>
           </li>
           <li>
-            <a href="https://www.speedtest.net/">Vídeos</a>
+            <a href="">Vídeos</a>
           </li>
           <li>
-            <a href="https://www.speedtest.net/">Podcast</a>
+            <a href="">Podcast</a>
           </li>
         </Nav>
         <Nav>

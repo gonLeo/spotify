@@ -1,33 +1,56 @@
-import React from "react";
+import React, { Component } from "react";
+
+import propTypes from 'prop-types';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Creators as PlaylistsActions } from '../../store/ducks/playlists';
 
 import {Container, Title, List, Playlist} from './styles'
 
-const Browse = () => (
-  <Container>
-    <Title> Navegar</Title>
-    <List>
-        <Playlist to="/playlists/1">
-            <img src="https://img.apmcdn.org/80ef67f5910de61be7dbb1a1adfdb4253e08dad4/square/0b317c-20130929-arctic-monkeys-am-album-cover-art.jpg" alt="Playlist"/>
-            <strong>Arctic monkeys</strong>
-            <p>Só as melhores do AM</p>
-        </Playlist>
-        <Playlist to="/playlists/1">
-            <img src="https://img.apmcdn.org/80ef67f5910de61be7dbb1a1adfdb4253e08dad4/square/0b317c-20130929-arctic-monkeys-am-album-cover-art.jpg" alt="Playlist"/>
-            <strong>Arctic monkeys</strong>
-            <p>Só as melhores do AM</p>
-        </Playlist>
-        <Playlist to="/playlists/1">
-            <img src="https://img.apmcdn.org/80ef67f5910de61be7dbb1a1adfdb4253e08dad4/square/0b317c-20130929-arctic-monkeys-am-album-cover-art.jpg" alt="Playlist"/>
-            <strong>Arctic monkeys</strong>
-            <p>Só as melhores do AM</p>
-        </Playlist>
-        <Playlist to="/playlists/1">
-            <img src="https://img.apmcdn.org/80ef67f5910de61be7dbb1a1adfdb4253e08dad4/square/0b317c-20130929-arctic-monkeys-am-album-cover-art.jpg" alt="Playlist"/>
-            <strong>Arctic monkeys</strong>
-            <p>Só as melhores do AM</p>
-        </Playlist>
-    </List>
-  </Container>
-);
+class Browse extends Component {
 
-export default Browse;
+    static propTypes = {
+        getPlaylistsRequest: propTypes.func.isRequired,
+        playlists: propTypes.shape({
+          data: propTypes.arrayOf(propTypes.shape({
+            id: propTypes.number,
+            title: propTypes.string,
+            thumbnail: propTypes.string,
+            description: propTypes.string,
+          })),
+        }).isRequired,
+      };
+    
+      componentDidMount(){
+        this.props.getPlaylistsRequest();
+      }
+
+    render(){
+        return(
+            <Container>
+                <Title> Navegar</Title>
+                <List>
+                    {this.props.playlists.data.map(playlist => (
+                        <Playlist key={playlist.id} to={`/playlists/${playlist.id}`}>
+                            <img
+                                src={playlist.thumbnail}
+                                alt={playlist.title} />
+                            <strong> {playlist.title} </strong>
+                            <p>{playlist.description}</p>
+                        </Playlist>
+                    ))}
+                </List>
+            </Container>
+        );
+    }
+}
+
+const mapSateToProps = state =>({
+    playlists: state.playlists,
+  });
+  
+  const mapDispatchToProps = dispatch => bindActionCreators(PlaylistsActions, dispatch);
+  
+  
+  export default connect(mapSateToProps, mapDispatchToProps)(Browse);
