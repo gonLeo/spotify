@@ -1,0 +1,7 @@
+Para iniciar o servidor usa-se o código:
+
+    json-server server.json -p 3001 -w -d 500
+
+        -se não funcionar rodar:
+
+            sudo yarn global add json-server

@@ -1,115 +1,123 @@
-import React, { Component } from 'react';
-import propTypes from 'prop-types';
+import React, { Component } from "react";
+import propTypes from "prop-types";
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Creators as PlaylistDetailsActions } from '../../store/ducks/playlistDetails';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Creators as PlaylistDetailsActions } from "../../store/ducks/playlistDetails";
 
-import { Container, Header, SongList } from './styles';
+import { Container, Header, SongList } from "./styles";
 
-import Loading from '../../components/Loading';
+import Loading from "../../components/Loading";
 
-import ClockIcon from '../../assets/images/clock.svg';
-import PlusIcoon from '../../assets/images/plus.svg';
+import ClockIcon from "../../assets/images/clock.svg";
+import PlusIcoon from "../../assets/images/plus.svg";
 
+class Playlist extends Component {
+  static propTypes = {
+    match: propTypes.shape({
+      params: propTypes.shape({
+        id: propTypes.number,
+      }),
+    }).isRequired,
+    getPlaylistDetailsRequest: propTypes.func.isRequired,
+    playlistDetails: propTypes.shape({
+      data: propTypes.shape({
+        thumbnail: propTypes.string,
+        title: propTypes.string,
+        description: propTypes.string,
+        songs: propTypes.arrayOf(
+          propTypes.shape({
+            id: propTypes.number,
+            title: propTypes.title,
+            author: propTypes.string,
+            album: propTypes.string,
+          })
+        ),
+      }),
+      loading: propTypes.bool,
+    }).isRequired,
+  };
 
-class Playlist extends Component{
+  componentDidMount() {
+    this.loadPlaylistDetails();
+  }
 
-    static propTypes = {
-        match: propTypes.shape({
-            params:propTypes.shape({
-                id: propTypes.number,
-            }),
-        }).isRequired,
-        getPlaylistDetailsRequest: propTypes.func.isRequired,
-        playlistDetails: propTypes.shape({
-            data: propTypes.shape({
-                thumbnail: propTypes.string,
-                title: propTypes.string,
-                description: propTypes.string,
-                songs: propTypes.arrayOf(propTypes.shape({
-                    id: propTypes.number,
-                    title: propTypes.title,
-                    author: propTypes.string,
-                    album: propTypes.string,
-                })),
-            }),
-            loading: propTypes.bool,
-        }).isRequired
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      this.loadPlaylistDetails();
     }
+  }
 
-    componentDidMount(){
-        this.loadPlaylistDetails();
-    }
+  loadPlaylistDetails = () => {
+    const { id } = this.props.match.params;
 
-    componentDidUpdate(prevProps){
-        if(prevProps.match.params.id != this.props.match.params.id){
-            this.loadPlaylistDetails();
-        }
-    }
+    this.props.getPlaylistDetailsRequest(id);
+  };
 
-    loadPlaylistDetails = () => {
-        const { id } = this.props.match.params;
+  renderDetails = () => {
+    const playlist = this.props.playlistDetails.data;
+    return (
+      <Container>
+        <Header>
+          <img src={playlist.thumbnail} alt={playlist.title} />
+          <div>
+            <span>PLAYLIST</span>
+            <h1>{playlist.title}</h1>
+            {!!playlist.songs && <p>{playlist.songs.length} músicas</p>}
 
-        this.props.getPlaylistDetailsRequest(id);
-    }
+            <button>PLAY</button>
+          </div>
+        </Header>
+        <SongList cellPadding={0} cellSpacing={0}>
+          <thead>
+            <th />
+            <th>Título</th>
+            <th>Artista</th>
+            <th>Álbum</th>
+            <th>
+              <img src={ClockIcon} alt="Duração" />
+            </th>
+          </thead>
+          <tbody>
+            {!playlist.songs ? (
+              <tr>
+                <td colSpan={5}>Nenhuma música encontrada</td>
+              </tr>
+            ) : (
+              playlist.songs.map((song) => (
+                <tr key={song.id}>
+                  <td>
+                    <img src={PlusIcoon} alt="Adicionar" />
+                  </td>
+                  <td>{song.title}</td>
+                  <td>{song.author}</td>
+                  <td>{song.album}</td>
+                  <td>3:25</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </SongList>
+      </Container>
+    );
+  };
 
-    renderDetails = () => {
-        const playlist = this.props.playlistDetails.data;
-        return (
-            <Container>
-                    <Header>
-                        <img
-                            src={playlist.thumbnail}
-                            alt={playlist.title}/>
-                        <div>
-                            <span>PLAYLIST</span>
-                            <h1>{playlist.title}</h1>
-                            { !!playlist.songs && <p>{playlist.songs.length} músicas</p> }
-    
-                            <button>PLAY</button>
-                        </div>
-                    </Header>
-                    <SongList cellPadding={0} cellSpacing={0}>
-                        <thead>
-                        <th/>  
-                            <th>Título</th>
-                            <th>Artista</th>
-                            <th>Álbum</th>
-                            <th><img src={ClockIcon} alt="Duração"/></th>
-                        </thead>
-                        <tbody>
-                            {!playlist.songs ? (
-                                <tr>
-                                    <td colSpan={5}>Nenhuma música encontrada</td>
-                                </tr>
-                            ): (
-                                playlist.songs.map(song => (
-                                    <tr key={song.id}>
-                                        <td><img src={PlusIcoon} alt="Adicionar"/></td>
-                                        <td>{song.title}</td>
-                                        <td>{song.author}</td>
-                                        <td>{song.album}</td>
-                                        <td>3:25</td>
-                                    </tr>
-                                ))
-                            )}                            
-                        </tbody>
-                    </SongList>
-                </Container>
-        )
-    };
+  render() {
+    return this.props.playlistDetails.loading ? (
+      <Container loading>
+        <Loading />
+      </Container>
+    ) : (
+      this.renderDetails()
+    );
+  }
+}
 
-    render(){
-        return this.props.playlistDetails.loading ? <Container loading><Loading /></Container> : this.renderDetails();
-    }
-}    
+const mapSateToProps = (state) => ({
+  playlistDetails: state.playlistDetails,
+});
 
-const mapSateToProps = state =>({
-    playlistDetails: state.playlistDetails,
-  });
-  
-  const mapDispatchToProps = dispatch => bindActionCreators(PlaylistDetailsActions, dispatch);
-  
-  
-  export default connect(mapSateToProps, mapDispatchToProps)(Playlist);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(PlaylistDetailsActions, dispatch);
+
+export default connect(mapSateToProps, mapDispatchToProps)(Playlist);
