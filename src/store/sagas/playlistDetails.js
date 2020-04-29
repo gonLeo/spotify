@@ -13,6 +13,8 @@ export function* getPlaylistDetails(action) {
 
     yield put(PlaylistDetailsActions.getPlaylistDetailsSuccess(response.data));
   } catch (err) {
-    yield put(ErrorActions.setError("Não foi possível obter as playlists"));
+    yield put(
+      ErrorActions.setError("Não foi possível obter as músicas da playlists")
+    );
   }
 }

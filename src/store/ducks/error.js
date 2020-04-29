@@ -1,6 +1,6 @@
 export const Types = {
-  GET_REQUEST: "error/SET",
-  GET_SUCESS: "error/HIDE",
+  SET: "error/SET",
+  HIDE: "error/HIDE",
 };
 
 const INITIAL_STATE = {

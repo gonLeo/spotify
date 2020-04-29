@@ -4,8 +4,9 @@ import propTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Creators as PlaylistDetailsActions } from "../../store/ducks/playlistDetails";
+import { Creators as PlayerActions } from "../../store/ducks/player";
 
-import { Container, Header, SongList } from "./styles";
+import { Container, Header, SongList, SongItem } from "./styles";
 
 import Loading from "../../components/Loading";
 
@@ -36,6 +37,14 @@ class Playlist extends Component {
       }),
       loading: propTypes.bool,
     }).isRequired,
+    loadSong: propTypes.func.isRequired,
+    currentSong: propTypes.shape({
+      id: propTypes.number,
+    }).isRequired,
+  };
+
+  state = {
+    selectedSong: null,
   };
 
   componentDidMount() {
@@ -85,7 +94,16 @@ class Playlist extends Component {
               </tr>
             ) : (
               playlist.songs.map((song) => (
-                <tr key={song.id}>
+                <SongItem
+                  key={song.id}
+                  onClick={() => this.setState({ selectedSong: song.id })}
+                  onDoubleClick={() => this.props.loadSong(song)}
+                  selected={this.state.selectedSong === song.id}
+                  playing={
+                    this.props.currentSong &&
+                    this.props.currentSong.id === song.id
+                  }
+                >
                   <td>
                     <img src={PlusIcoon} alt="Adicionar" />
                   </td>
@@ -93,7 +111,7 @@ class Playlist extends Component {
                   <td>{song.author}</td>
                   <td>{song.album}</td>
                   <td>3:25</td>
-                </tr>
+                </SongItem>
               ))
             )}
           </tbody>
@@ -115,9 +133,10 @@ class Playlist extends Component {
 
 const mapSateToProps = (state) => ({
   playlistDetails: state.playlistDetails,
+  currentSong: state.player.currentSong,
 });
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(PlaylistDetailsActions, dispatch);
+  bindActionCreators({ ...PlaylistDetailsActions, ...PlayerActions }, dispatch);
 
 export default connect(mapSateToProps, mapDispatchToProps)(Playlist);
